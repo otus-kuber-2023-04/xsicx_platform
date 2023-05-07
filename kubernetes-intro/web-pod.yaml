@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+spec:
+  containers:
+    - name: web
+      image: xsicx/intro-web:1
+      ports:
+        - containerPort: 8000
+      volumeMounts:
+        - name: app
+          mountPath: /go/src/web/app
+  initContainers:
+    - name: init-myservice
+      image: busybox:1.36
+      command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
+      volumeMounts:
+        - name: app
+          mountPath: /app
+  volumes:
+    - name: app
+      emptyDir: {}
